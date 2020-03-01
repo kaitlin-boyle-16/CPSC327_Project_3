@@ -18,7 +18,8 @@ using namespace std;
  * then reload them from disk 
  */
 void reloadAllData(){
-
+	patron() = {};
+	book() = {};
 }
 
 /* checkout a book to a patron
@@ -80,7 +81,16 @@ int enroll(std::string &name){
  * 
  */
 int numbBooks(){
-	return 0;
+	string line;
+		int count = 0;
+		ifstream myfile (BOOKFILE);
+		if (myfile.is_open()) {
+			while (getline(myfile, line, '\n')) {
+				count += 1;
+			}
+			myfile.close();
+		}
+		return count;
 }
 
 /*
@@ -88,7 +98,17 @@ int numbBooks(){
  * (ie. if 3 patrons returns 3)
  */
 int numbPatrons(){
-	return 0;
+	string line;
+	int count = 0;
+	ifstream myfile (PATRONFILE);
+	if (myfile.is_open()) {
+		while (getline(myfile, line, '\n')) {
+			count += 1;
+		}
+		myfile.close();
+	}
+	return count;
+
 }
 
 /*the number of books patron has checked out
@@ -107,6 +127,11 @@ int howmanybooksdoesPatronHaveCheckedOut(int patronid){
  *         PATRON_NOT_ENROLLED no patron with this patronid
  */
 int whatIsPatronName(std::string &name,int patronid){
-	return SUCCESS;
+	for (int i =0, i < name.length(), i++) {
+		if (name(i) == patronid) {
+			return SUCCESS;
+		}
+	}
+	return PATRON_NOT_ENROLLED;
 }
 

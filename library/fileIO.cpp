@@ -1,5 +1,10 @@
 #include "../includes_usr/fileIO.h"
+#include <algorithm>
 using namespace std;
+
+bool compare(string a, string b) {
+		return a > b;
+}
 /* clears, then loads books from the file filename
  * returns  COULD_NOT_OPEN_FILE if cannot open filename
  * 			NO_BOOKS_IN_LIBRARY if there are 0 entries in books
@@ -7,6 +12,23 @@ using namespace std;
  * */
 int loadBooks(std::vector<book> &books, const char* filename)
 {
+	books.clear();
+	string line;
+	ifstream myfile(filename);
+	if (!myfile.is_open()) {
+		return COULD_NOT_OPEN_FILE;
+	}
+	if (books.size() == 0) {
+		return NO_BOOKS_IN_LIBRARY;
+	}
+	else {
+		while (!myfile.eof()) {
+			getline(myfile, line, '\n');
+			books.push_back(line);
+		}
+		myfile.close();
+	}
+
 	return SUCCESS;
 }
 
@@ -17,6 +39,22 @@ int loadBooks(std::vector<book> &books, const char* filename)
  * */
 int saveBooks(std::vector<book> &books, const char* filename)
 {
+	string line;
+		ifstream myfile (filename);
+		if (!myfile.is_open()) {
+			return COULD_NOT_OPEN_FILE;
+		}
+		if (books.size() == 0) {
+			return NO_BOOKS_IN_LIBRARY;
+		}
+		else {
+			while (!myfile.eof()) {
+				getline(myfile, line, '\n');
+				books.push_back(line);
+			}
+			sort(books.begin(), books.end(), compare); //serializes books here
+			myfile.close();
+		}
 	return SUCCESS;
 }
 
@@ -27,6 +65,22 @@ int saveBooks(std::vector<book> &books, const char* filename)
  * */
 int loadPatrons(std::vector<patron> &patrons, const char* filename)
 {
+	patrons.clear();
+		string line;
+		ifstream myfile (filename);
+		if (!myfile.is_open()) {
+			return COULD_NOT_OPEN_FILE;
+		}
+		if (patrons.size() == 0) {
+			return NO_PATRONS_IN_LIBRARY;
+		}
+		else {
+			while (!myfile.eof()) {
+				getline(myfile, line, '\n');
+				patrons.push_back(line);
+			}
+			myfile.close();
+		}
 	return SUCCESS;
 }
 
@@ -37,5 +91,17 @@ int loadPatrons(std::vector<patron> &patrons, const char* filename)
  * */
 int savePatrons(std::vector<patron> &patrons, const char* filename)
 {
+	string line;
+			ifstream myfile (filename);
+			if (!myfile.is_open()) {
+				return COULD_NOT_OPEN_FILE;
+			}
+			if (patrons.size() == 0) {
+				return NO_PATRONS_IN_LIBRARY;
+			}
+			else {
+				sort(patrons.begin(), patrons.end(), compare); //serializes patrons here
+				myfile.close();
+			}
 	return SUCCESS;
 }
